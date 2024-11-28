@@ -12,6 +12,7 @@ public class Ride implements RideInterface{
     public Ride(){}
     public Ride(String rideType, Employee employee, boolean operatingState) {
         this.rideType = rideType;
+        setRideType(rideType);
         this.employee = employee;
         this.operatingState = operatingState;
         this.visitorsQueue = new LinkedList<>();

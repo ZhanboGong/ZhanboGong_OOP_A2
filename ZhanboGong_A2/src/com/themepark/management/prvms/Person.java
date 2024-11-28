@@ -1,6 +1,6 @@
 package com.themepark.management.prvms;
 
-public class Person {
+public abstract class Person {
     protected int ID;
     protected String firstName;
     protected String lastName;
