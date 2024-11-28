@@ -2,7 +2,7 @@ package com.themepark.management.entity;
 
 public interface RideInterface {
 
-    public void addVisitorToQueue();
+    public void addVisitorToQueue(Visitor visitor);
     public void removeVisitorFromQueue();
     public void printQueue();
     public void runOneCycle();
