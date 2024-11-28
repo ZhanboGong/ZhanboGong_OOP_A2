@@ -1,4 +1,4 @@
-package com.themepark.management.entity;
+package com.themepark.management.prvms;
 import java.util.LinkedList;
 import java.util.Queue;
 

@@ -1,6 +1,5 @@
 package com.themepark.management.test;
 
-import com.themepark.management.entity.*;
 public class AssessmentTwo {
     public static void main(String[] args) {
 

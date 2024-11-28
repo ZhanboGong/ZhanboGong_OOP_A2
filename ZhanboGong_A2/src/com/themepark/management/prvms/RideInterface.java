@@ -1,4 +1,4 @@
-package com.themepark.management.entity;
+package com.themepark.management.prvms;
 
 public interface RideInterface {
 
