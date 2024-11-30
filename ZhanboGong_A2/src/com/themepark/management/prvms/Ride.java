@@ -1,13 +1,15 @@
 package com.themepark.management.prvms;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Ride implements RideInterface{
     // rollerCoaster carries 2 people at a time and enters history after playing, while thunderstorm carries 4 people at a time
     private String rideType;
     private Employee employee;
     private boolean operatingState;
+    private int setting;
     private Queue<Visitor> visitorsQueue;
+    private ArrayList<Visitor> lastVisitors;
+
 
     public Ride(){}
     public Ride(String rideType, Employee employee, boolean operatingState) {
@@ -16,12 +18,48 @@ public class Ride implements RideInterface{
         this.employee = employee;
         this.operatingState = operatingState;
         this.visitorsQueue = new LinkedList<>();
+        this.lastVisitors = new ArrayList<>();
+        if(rideType.equals("Roller Coaster")){
+            this.setting = 2;
+        }
+        else if(rideType.equals("Thunder Storm")){
+            this.setting = 4;
+;        }
+        else{
+            System.out.println("--");
+        }
     }
 
     @Override
-    public void addVisitorToQueue(Visitor visitor){}
+    public void addVisitorToQueue(Visitor visitor){
+        if(visitor.getPlayStatus().equals("Leisure"))
+        {
+            visitorsQueue.offer(visitor);
+            visitor.setPlayStatus("On Queue");
+        }
+        else{
+            System.out.println();
+        }
+    }
     @Override
-    public void removeVisitorFromQueue(){}
+    public void removeVisitorFromQueue(){
+        changeLastVisitors();
+        for (int i = 0; i < setting; i++) {
+            Visitor visitor = visitorsQueue.poll();
+            if(visitor != null){
+                if (setting == 4){
+                    visitor.setPlayStatus("On Thunder Storm");
+                }
+                else {
+                    visitor.setPlayStatus("On Roller Coaster");
+                }
+            }
+            else {
+                System.out.println("--");
+            }
+            lastVisitors.add(visitor);
+        }
+    }
     @Override
     public void printQueue(){}
     @Override
@@ -36,6 +74,13 @@ public class Ride implements RideInterface{
     public void numberOfVisitors(){}
     @Override
     public void printRideHistory(){}
+
+    private void changeLastVisitors(){
+        for (Visitor lastVisitor : lastVisitors) {
+            lastVisitor.setPlayStatus("Leisure");
+        }
+        lastVisitors.clear();
+    }
 
     public String getRideType() {
         return rideType;
@@ -65,7 +110,11 @@ public class Ride implements RideInterface{
         return visitorsQueue;
     }
 
-    public void setVisitorsQueue(Queue<Visitor> visitorsQueue) {
-        this.visitorsQueue = visitorsQueue;
+    public int getSetting() {
+        return setting;
+    }
+
+    public List<Visitor> getLastVisitors() {
+        return lastVisitors;
     }
 }
