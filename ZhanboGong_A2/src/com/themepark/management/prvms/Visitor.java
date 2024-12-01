@@ -23,7 +23,7 @@ public class Visitor {
     public void setPlayStatus(String playStatus) {
         String playStatusRegex = "Leisure|On Queue|On Roller Coaster|On Thunder Storm";
         if(!playStatus.matches(playStatusRegex)){
-            System.out.println("Wrong Input: The play state must be Leisure, On Queue, On Roller Coaster, or On Thunder Storm!");
+            System.out.println("Wrong Input: The play status must be Leisure, On Queue, On Roller Coaster, or On Thunder Storm!");
         }
         else{
             this.playStatus = playStatus;

@@ -87,7 +87,13 @@ public class Ride implements RideInterface{
     }
 
     public void setRideType(String rideType) {
-        this.rideType = rideType;
+        String rideTypeRegex = "Roller Coaster|Thunder Storm";
+        if(!rideType.matches(rideTypeRegex)){
+            System.out.println("Wrong Input: The ride status must be Roller Coaster and Thunder Storm!");
+        }
+        else {
+            this.rideType = rideType;
+        }
     }
 
     public Employee getEmployee() {
