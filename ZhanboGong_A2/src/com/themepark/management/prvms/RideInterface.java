@@ -6,9 +6,8 @@ public interface RideInterface {
     public void removeVisitorFromQueue();
     public void printQueue();
     public void runOneCycle();
-    public void addVisitorToHistory();
-    public void addVisitorFromHistory();
-    public void checkVisitorFromHistory();
+    public void addVisitorToHistory(Visitor visitor);
+    public void checkVisitorFromHistory(Visitor visitor);
     public void numberOfVisitors();
     public void printRideHistory();
 }

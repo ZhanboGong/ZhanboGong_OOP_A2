@@ -9,6 +9,7 @@ public class Ride implements RideInterface{
     private int setting;
     private Queue<Visitor> visitorsQueue;
     private ArrayList<Visitor> lastVisitors;
+    private LinkedList<Visitor> rideVisitorHistory;
 
 
     public Ride(){}
@@ -19,6 +20,7 @@ public class Ride implements RideInterface{
         this.operatingState = operatingState;
         this.visitorsQueue = new LinkedList<>();
         this.lastVisitors = new ArrayList<>();
+        this.rideVisitorHistory = new LinkedList<>();
         if(rideType.equals("Roller Coaster")){
             this.setting = 2;
         }
@@ -32,6 +34,7 @@ public class Ride implements RideInterface{
 
     @Override
     public void addVisitorToQueue(Visitor visitor){
+        // 添加null检测
         if(visitor.getPlayStatus().equals("Leisure"))
         {
             visitorsQueue.offer(visitor);
@@ -65,15 +68,41 @@ public class Ride implements RideInterface{
     @Override
     public void runOneCycle(){}
     @Override
-    public void addVisitorToHistory(){}
+    public void addVisitorToHistory(Visitor visitor){
+        //添加null检测以及反馈
+        if(visitor != null){
+            rideVisitorHistory.add(visitor);
+        }
+        else {
+            System.out.println("到时候写反馈描述，可选择换成throw out");
+        }
+    }
     @Override
-    public void addVisitorFromHistory(){}
+    public void checkVisitorFromHistory(Visitor visitor){
+        //对visitor是否为空进行判断
+        int historyCount = 0;
+        Iterator<Visitor> visitorIterator = rideVisitorHistory.iterator();
+        while (visitorIterator.hasNext()){
+            Visitor visitorHistory = visitorIterator.next();
+            if (visitorHistory.equals(visitor)){
+                historyCount++;
+            }
+        }
+        if (historyCount == 0){
+            System.out.println("未找到");
+        }
+        else {
+            System.out.println(historyCount);
+        }
+    }
     @Override
-    public void checkVisitorFromHistory(){}
+    public void numberOfVisitors(){
+        //相同ID的游客只计数一次
+    }
     @Override
-    public void numberOfVisitors(){}
-    @Override
-    public void printRideHistory(){}
+    public void printRideHistory(){
+        //相同ID的游客只计数一次
+    }
 
     private void changeLastVisitors(){
         for (Visitor lastVisitor : lastVisitors) {
@@ -82,6 +111,9 @@ public class Ride implements RideInterface{
         lastVisitors.clear();
     }
 
+    public void exportRideHistory(){
+
+    }
     public String getRideType() {
         return rideType;
     }
@@ -123,4 +155,5 @@ public class Ride implements RideInterface{
     public List<Visitor> getLastVisitors() {
         return lastVisitors;
     }
+    public LinkedList<Visitor> getRideVisitorHistory(){return rideVisitorHistory;}
 }
