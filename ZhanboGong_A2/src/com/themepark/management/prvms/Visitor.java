@@ -16,6 +16,12 @@ public class Visitor {
         this.ticketType = ticketType;
     }
 
+    public void personalHistory(String rideType){
+        String personalRecord = playOfNumber++ + ":" + rideType;
+        rideHistories.add(personalRecord);
+        System.out.println("反馈");
+    }
+
     public String getPlayStatus() {
         return playStatus;
     }

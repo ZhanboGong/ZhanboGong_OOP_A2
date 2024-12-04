@@ -34,14 +34,18 @@ public class Ride implements RideInterface{
 
     @Override
     public void addVisitorToQueue(Visitor visitor){
-        // 添加null检测
-        if(visitor.getPlayStatus().equals("Leisure"))
-        {
-            visitorsQueue.offer(visitor);
-            visitor.setPlayStatus("On Queue");
+        if (visitor != null){
+            if(visitor.getPlayStatus().equals("Leisure"))
+            {
+                visitorsQueue.offer(visitor);
+                visitor.setPlayStatus("On Queue");
+            }
+            else{
+                System.out.println("反馈");
+            }
         }
-        else{
-            System.out.println();
+        else {
+            System.out.println("反馈");
         }
     }
     @Override
@@ -60,6 +64,7 @@ public class Ride implements RideInterface{
             else {
                 System.out.println("--");
             }
+            // visitor.getRideHistories();
             lastVisitors.add(visitor);
         }
     }
