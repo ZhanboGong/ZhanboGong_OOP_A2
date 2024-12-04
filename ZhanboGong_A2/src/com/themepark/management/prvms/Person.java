@@ -25,6 +25,8 @@ public abstract class Person {
         this.ID = ID;
     }
 
+    public abstract void printInformation();
+
     public String getFirstName() {
         return firstName;
     }

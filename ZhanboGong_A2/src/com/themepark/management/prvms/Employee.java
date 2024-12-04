@@ -11,6 +11,10 @@ public class Employee extends Person{
         this.workingStatus = workingStatus;
     }
 
+    @Override
+    public void printInformation(){
+
+    }
     public String getEmployeeType() {
         return employeeType;
     }

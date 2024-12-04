@@ -2,7 +2,7 @@ package com.themepark.management.prvms;
 
 import java.util.ArrayList;
 
-public class Visitor {
+public class Visitor extends Person{
 
     private String playStatus;
     private String ticketType;
@@ -16,11 +16,23 @@ public class Visitor {
         this.ticketType = ticketType;
     }
 
+    @Override
+    public void printInformation(){
+        System.out.println("================================");
+        System.out.println("Visitor ID: " + ID);
+        System.out.println("Visitor Name: " + firstName + " " + lastName);
+        System.out.println("Ticket Type: " + ticketType);
+        System.out.println("Play Status: " + playStatus);
+        System.out.println("================================");
+    }
+
     public void personalHistory(String rideType){
         String personalRecord = playOfNumber++ + ":" + rideType;
         rideHistories.add(personalRecord);
         System.out.println("反馈");
     }
+
+    // 可添加方法进行读取历史
 
     public String getPlayStatus() {
         return playStatus;
@@ -51,7 +63,7 @@ public class Visitor {
     }
 
     public int getPlayOfNumber() {
-        return playOfNumber;
+        return playOfNumber - 1;
     }
 
     public void setPlayOfNumber(){

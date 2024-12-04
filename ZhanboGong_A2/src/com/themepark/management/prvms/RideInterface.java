@@ -8,6 +8,6 @@ public interface RideInterface {
     public void runOneCycle();
     public void addVisitorToHistory(Visitor visitor);
     public void checkVisitorFromHistory(Visitor visitor);
-    public void numberOfVisitors();
+    public int numberOfVisitors();
     public void printRideHistory();
 }

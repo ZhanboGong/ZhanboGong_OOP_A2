@@ -15,7 +15,6 @@ public class Ride implements RideInterface{
     public Ride(){}
     public Ride(String rideType, Employee employee, boolean operatingState) {
         this.rideType = rideType;
-        setRideType(rideType);
         this.employee = employee;
         this.operatingState = operatingState;
         this.visitorsQueue = new LinkedList<>();
@@ -28,7 +27,7 @@ public class Ride implements RideInterface{
             this.setting = 4;
 ;        }
         else{
-            System.out.println("--");
+            System.out.println("反馈");
         }
     }
 
@@ -41,16 +40,17 @@ public class Ride implements RideInterface{
                 visitor.setPlayStatus("On Queue");
             }
             else{
-                System.out.println("反馈");
+                System.out.println("The current status of the visitor is " + visitor.getPlayStatus() + ", unable to join queue!");
             }
         }
         else {
-            System.out.println("反馈");
+            System.out.println("The visitor object is null and cannot join the queue!");
         }
     }
     @Override
     public void removeVisitorFromQueue(){
         changeLastVisitors();
+        // 后续添加对Queue中的人数进行判断
         for (int i = 0; i < setting; i++) {
             Visitor visitor = visitorsQueue.poll();
             if(visitor != null){
@@ -60,53 +60,74 @@ public class Ride implements RideInterface{
                 else {
                     visitor.setPlayStatus("On Roller Coaster");
                 }
+                visitor.personalHistory(rideType);
             }
             else {
-                System.out.println("--");
+                System.out.println("The visitor object is null and cannot be modified!");
             }
-            // visitor.getRideHistories();
             lastVisitors.add(visitor);
         }
     }
     @Override
-    public void printQueue(){}
+    public void printQueue(){
+        if (visitorsQueue.isEmpty()){
+            System.out.println("There are no visitors in the queue!");
+        }
+        else {
+            for (Visitor visitor : visitorsQueue) {
+                visitor.printInformation();
+            }
+        }
+    }
+    //maxRider就是我现在的Setting
     @Override
     public void runOneCycle(){}
     @Override
     public void addVisitorToHistory(Visitor visitor){
-        //添加null检测以及反馈
         if(visitor != null){
             rideVisitorHistory.add(visitor);
         }
         else {
-            System.out.println("到时候写反馈描述，可选择换成throw out");
+            System.out.println("The visitor object is null and cannot be added to the history!");
         }
     }
     @Override
     public void checkVisitorFromHistory(Visitor visitor){
-        //对visitor是否为空进行判断
-        int historyCount = 0;
-        Iterator<Visitor> visitorIterator = rideVisitorHistory.iterator();
-        while (visitorIterator.hasNext()){
-            Visitor visitorHistory = visitorIterator.next();
-            if (visitorHistory.equals(visitor)){
-                historyCount++;
+        if(visitor != null) {
+            Iterator<Visitor> visitorIterator = rideVisitorHistory.iterator();
+            while (visitorIterator.hasNext()){
+                Visitor visitorHistory = visitorIterator.next();
+                if (visitorHistory.equals(visitor)){
+                    System.out.println("The visitor has been found with a total of " +
+                            visitor.getPlayOfNumber() +
+                            " visits. Please check the visitor's personal history for details.");
+                    return;
+                }
             }
-        }
-        if (historyCount == 0){
-            System.out.println("未找到");
+            System.out.println("The visitor was not found!");
+            return;
         }
         else {
-            System.out.println(historyCount);
+            System.out.println("The visitor object is null and cannot be checked!");
         }
     }
     @Override
-    public void numberOfVisitors(){
-        //相同ID的游客只计数一次
+    public int numberOfVisitors(){
+        return rideVisitorHistory.size();
     }
     @Override
     public void printRideHistory(){
-        //相同ID的游客只计数一次
+        if (rideVisitorHistory.isEmpty()){
+            System.out.println("The queue is empty!");
+        }
+        else {
+            Iterator<Visitor> visitorIterator = rideVisitorHistory.iterator();
+            System.out.println("---" + rideType + " Visiting History" + "---");
+            while (visitorIterator.hasNext()){
+                Visitor visitor = visitorIterator.next();
+                visitor.printInformation();
+            }
+        }
     }
 
     private void changeLastVisitors(){
