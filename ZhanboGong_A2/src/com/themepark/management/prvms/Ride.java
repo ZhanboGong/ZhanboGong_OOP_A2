@@ -6,7 +6,9 @@ public class Ride implements RideInterface{
     private String rideType;
     private Employee employee;
     private boolean operatingState;
-    private int setting;
+    private int maxRider;
+    private int numOfCycles;
+    private Set<Visitor> onRideVisitor;
     private Queue<Visitor> visitorsQueue;
     private ArrayList<Visitor> lastVisitors;
     private LinkedList<Visitor> rideVisitorHistory;
@@ -16,15 +18,17 @@ public class Ride implements RideInterface{
     public Ride(String rideType, Employee employee, boolean operatingState) {
         this.rideType = rideType;
         this.employee = employee;
+        this.numOfCycles = 0;
         this.operatingState = operatingState;
         this.visitorsQueue = new LinkedList<>();
-        this.lastVisitors = new ArrayList<>();
         this.rideVisitorHistory = new LinkedList<>();
+        this.onRideVisitor = new LinkedHashSet<>();
+        //判断是否type为null
         if(rideType.equals("Roller Coaster")){
-            this.setting = 2;
+            this.maxRider = 2;
         }
         else if(rideType.equals("Thunder Storm")){
-            this.setting = 4;
+            this.maxRider = 4;
 ;        }
         else{
             System.out.println("反馈");
@@ -49,23 +53,26 @@ public class Ride implements RideInterface{
     }
     @Override
     public void removeVisitorFromQueue(){
-        changeLastVisitors();
+        //空的情况下继续遍历可能会报错
+        //int ridersToTake = Math.min(visitorsQueue.size(), maxRider);
         // 后续添加对Queue中的人数进行判断
-        for (int i = 0; i < setting; i++) {
+        //for (int i = 0; i < ridersToTake; i++) { ... }
+        for (int i = 0; i < maxRider; i++) {
             Visitor visitor = visitorsQueue.poll();
             if(visitor != null){
-                if (setting == 4){
+                if (maxRider == 4){
                     visitor.setPlayStatus("On Thunder Storm");
                 }
                 else {
                     visitor.setPlayStatus("On Roller Coaster");
                 }
                 visitor.personalHistory(rideType);
+                onRideVisitor.add(visitor);
+                addVisitorToHistory(visitor);
             }
             else {
                 System.out.println("The visitor object is null and cannot be modified!");
             }
-            lastVisitors.add(visitor);
         }
     }
     @Override
@@ -81,10 +88,23 @@ public class Ride implements RideInterface{
     }
     //maxRider就是我现在的Setting
     @Override
-    public void runOneCycle(){}
+    public void runOneCycle(){
+        if (employee == null){
+            System.out.println("The Ride cannot be run without an operator!");
+            return;
+        }
+        if (visitorsQueue.isEmpty()){
+            System.out.println("No one is currently queuing, so the Ride cannot run!");
+            return;
+        }
+        changeLastVisitors();
+        removeVisitorFromQueue();
+        numOfCycles++;
+    }
     @Override
     public void addVisitorToHistory(Visitor visitor){
         if(visitor != null){
+            //加一个判断，判断是否已经存在
             rideVisitorHistory.add(visitor);
         }
         else {
@@ -131,10 +151,10 @@ public class Ride implements RideInterface{
     }
 
     private void changeLastVisitors(){
-        for (Visitor lastVisitor : lastVisitors) {
+        for (Visitor lastVisitor : onRideVisitor) {
             lastVisitor.setPlayStatus("Leisure");
         }
-        lastVisitors.clear();
+        onRideVisitor.clear();
     }
 
     public void exportRideHistory(){
@@ -174,12 +194,19 @@ public class Ride implements RideInterface{
         return visitorsQueue;
     }
 
-    public int getSetting() {
-        return setting;
+
+    public int getMaxRider() {
+        return maxRider;
     }
 
     public List<Visitor> getLastVisitors() {
         return lastVisitors;
     }
     public LinkedList<Visitor> getRideVisitorHistory(){return rideVisitorHistory;}
+
+    public int getNumOfCycles() {
+        return numOfCycles;
+    }
+
+
 }
