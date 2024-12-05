@@ -1,4 +1,5 @@
 package com.themepark.management.prvms;
+import java.io.*;
 import java.util.*;
 
 public class Ride implements RideInterface{
@@ -158,8 +159,43 @@ public class Ride implements RideInterface{
     }
 
     public void exportRideHistory(){
-
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+        File file = new File(rideHistoryFilePath);
+        try (FileWriter writer = new FileWriter(rideHistoryFilePath, true)) {
+            if (file.length() == 0){
+                writer.append("ID, Name, Ticket Type, Play Status\n");
+            }
+            for (Visitor visitor : rideVisitorHistory){
+                writer.append(String.valueOf(visitor.getID())).append(", ")
+                        .append(visitor.getFirstName()).append(" ").append(visitor.getLastName()).append(", ")
+                        .append(visitor.getTicketType()).append(", ")
+                        .append(visitor.getPlayStatus()).append("\n");
+            }
+            System.out.println("The history export was successful!");
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
+    public void importRideHistory() {
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+        File file = new File(rideHistoryFilePath);
+        if (file.length() == 0 || !file.exists()) {
+            System.out.println("The file does not exist or is empty and cannot be read!");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(rideHistoryFilePath))) {
+            String lineRecord;
+            while ((lineRecord = reader.readLine()) != null) {
+                String[] columns = lineRecord.split(",");
+                System.out.println("Visitor History: " + String.join(", ", columns));
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     public String getRideType() {
         return rideType;
     }
