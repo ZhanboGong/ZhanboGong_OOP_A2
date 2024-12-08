@@ -17,7 +17,6 @@ public class Ride implements RideInterface{
     private int numOfCycles;
     private Set<Visitor> onRideVisitor;
     private Queue<Visitor> visitorsQueue;
-    private ArrayList<Visitor> lastVisitors;
     private LinkedList<Visitor> rideVisitorHistory;
 
 
@@ -39,7 +38,7 @@ public class Ride implements RideInterface{
             this.maxRider = 4;
 ;        }
         else{
-            System.out.println("反馈");
+            System.out.println("A Ride containing the number of seats was not found!");
         }
     }
 
@@ -67,6 +66,13 @@ public class Ride implements RideInterface{
             System.out.println("The visitor object is null and cannot join the queue!");
         }
     }
+
+    /**
+     * Override the removeVisitorFromQueue method in the RideInterface
+     * Main function 1: The relationship between the actual tourists in the queue and maxRider is judged to ensure that when the number of tourists in the queue is less than maxRider, the Ride can also run normally.
+     * Main function 2: Remove Visitor from the queue
+     * Main function 3: Modify the status of the visitor, easy to manage
+     */
     @Override
     public void removeVisitorFromQueue(){
         int actualRiders = visitorsQueue.size();
@@ -76,12 +82,7 @@ public class Ride implements RideInterface{
         for (int i = 0; i < actualRiders; i++) {
             Visitor visitor = visitorsQueue.poll();
             if(visitor != null){
-                if (maxRider == 4){
-                    visitor.setPlayStatus("On Thunder Storm");
-                }
-                else {
-                    visitor.setPlayStatus("On Roller Coaster");
-                }
+                visitor.setPlayStatus("On " + rideType);
                 visitor.personalHistory(rideType);
                 onRideVisitor.add(visitor);
                 addVisitorToHistory(visitor);
@@ -91,22 +92,33 @@ public class Ride implements RideInterface{
             }
         }
     }
+
+    /**
+     * Override the printQueue method in the RideInterface
+     * Main function 1: Loop through the Queue and print information about the visitor
+     */
     @Override
     public void printQueue(){
         if (visitorsQueue.isEmpty()){
             System.out.println("There are no visitors in the queue!");
         }
         else {
+            System.out.println("=============Start printing=============");
             for (Visitor visitor : visitorsQueue) {
                 visitor.printInformation();
             }
+            System.out.println("=============End of print=============");
         }
     }
-    //maxRider就是我现在的Setting
+
+    /**
+     * Override the printQueue method in the RideInterface
+     * Main function 1: The status of the operator currently riding is detected
+     * Main function 2: Make a run of Ride using the relevant method
+     */
     @Override
     public void runOneCycle(){
-        // j加上对员工状态的判断
-        if (employee == null){
+        if (employee == null || !employee.getEmployeeType().equals(rideType + " Operator") || !employee.isWorkingStatus()){
             System.out.println("The Ride cannot be run without an operator!");
             return;
         }
@@ -118,16 +130,33 @@ public class Ride implements RideInterface{
         removeVisitorFromQueue();
         numOfCycles++;
     }
+
+    /**
+     * Override the addVisitorToHistory method in the RideInterface
+     * Main function 1: Checks whether the visitor has been included in the history and is null
+     * Main function 2: Add the visitor to the history
+     * @param visitor: visitor to be added to the history
+     */
     @Override
     public void addVisitorToHistory(Visitor visitor){
         if(visitor != null){
-            //加一个判断，判断是否已经存在
+            if (rideVisitorHistory.contains(visitor)){
+                System.out.println("The visitor is already included in the history.");
+                return;
+            }
             rideVisitorHistory.add(visitor);
+            System.out.println("Visitor " + visitor.getFirstName() + " added successfully!");
         }
         else {
             System.out.println("The visitor object is null and cannot be added to the history!");
         }
     }
+
+    /**
+     * Override the checkVisitorFromHistory method in the RideInterface
+     * Main function 1: The visitor that contains the input is detected from the history.
+     * @param visitor: Visitor that need to be checked from the history
+     */
     @Override
     public void checkVisitorFromHistory(Visitor visitor){
         if(visitor != null) {
@@ -142,20 +171,35 @@ public class Ride implements RideInterface{
                 }
             }
             System.out.println("The visitor was not found!");
-            return;
         }
         else {
             System.out.println("The visitor object is null and cannot be checked!");
         }
     }
+
+    /**
+     * Override the numberOfVisitors method in the RideInterface
+     * Main function 1: Returns the number of visitors in the history
+     * @return The length of the LinkedList, that is, the number of visitors in the History.
+     */
     @Override
     public int numberOfVisitors(){
+        if (rideVisitorHistory == null){
+            System.out.println("The history is null!");
+            return 0;
+        }
         return rideVisitorHistory.size();
     }
+
+    /**
+     * Override the printRideHistory method in the RideInterface
+     * Main function 1: Check whether rideVisitorHistory is not null or empty.
+     * Main function 2: Use iterator to print the history
+     */
     @Override
     public void printRideHistory(){
-        if (rideVisitorHistory.isEmpty()){
-            System.out.println("The queue is empty!");
+        if (rideVisitorHistory == null || rideVisitorHistory.isEmpty()){
+            System.out.println("The history is null or empty!");
         }
         else {
             Iterator<Visitor> visitorIterator = rideVisitorHistory.iterator();
@@ -167,6 +211,9 @@ public class Ride implements RideInterface{
         }
     }
 
+    /**
+     * The method outside the assignment requirement is used to modify the state of a visitor after riding the Ride
+     */
     private void changeLastVisitors(){
         for (Visitor lastVisitor : onRideVisitor) {
             lastVisitor.setPlayStatus("Leisure");
@@ -174,6 +221,11 @@ public class Ride implements RideInterface{
         onRideVisitor.clear();
     }
 
+    /**
+     * The visitor information in the history is exported and stored in a CSV file
+     * The exported information is the visitor's current ID, Name, Ticket Type and current status
+     * Export the files to the backup package for easier management
+     */
     public void exportRideHistory(){
         String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
@@ -193,6 +245,10 @@ public class Ride implements RideInterface{
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     *
+     */
     public void importRideHistory() {
         String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
@@ -202,9 +258,12 @@ public class Ride implements RideInterface{
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(rideHistoryFilePath))) {
             String lineRecord;
+            reader.readLine();
             while ((lineRecord = reader.readLine()) != null) {
                 String[] columns = lineRecord.split(",");
-                System.out.println("Visitor History: " + String.join(", ", columns));
+                if (columns.length == 4){
+                    System.out.println("ID: " + columns[0] + ", Name: " + columns[1] + ", Ticket Type: " + columns[2] + ", Play Status: " + columns[3]);
+                }
             }
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
@@ -212,6 +271,7 @@ public class Ride implements RideInterface{
         }
     }
 
+    // These are all getters and setters, some of which require data validation using regular expressions
     public String getRideType() {
         return rideType;
     }
@@ -251,9 +311,7 @@ public class Ride implements RideInterface{
         return maxRider;
     }
 
-    public List<Visitor> getLastVisitors() {
-        return lastVisitors;
-    }
+
     public LinkedList<Visitor> getRideVisitorHistory(){return rideVisitorHistory;}
 
     public int getNumOfCycles() {
