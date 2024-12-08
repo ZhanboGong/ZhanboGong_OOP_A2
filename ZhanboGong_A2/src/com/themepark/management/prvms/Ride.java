@@ -43,7 +43,13 @@ public class Ride implements RideInterface{
         }
     }
 
-    
+    /**
+     * Override the addVisitorToQueue method in the RideInterface
+     * Main function 1: visitor objects that are not null are added to the queue
+     * Main function 2: Modify the current tourist status to facilitate subsequent management
+     * Main function 3: Print suitable success/failure messages.
+     * @param visitor: Object Visitor to be added to the queue
+     */
     @Override
     public void addVisitorToQueue(Visitor visitor){
         if (visitor != null){
