@@ -11,7 +11,7 @@ public class Visitor extends Person{
 
     public Visitor(){super();}
     public Visitor(int ID, String firstName, String lastName, String mobileNumber, String playStatus, String ticketType){
-        super();
+        super(ID, firstName, lastName, mobileNumber);
         this.playStatus = playStatus;
         this.ticketType = ticketType;
     }
@@ -21,6 +21,7 @@ public class Visitor extends Person{
         System.out.println("================================");
         System.out.println("Visitor ID: " + ID);
         System.out.println("Visitor Name: " + firstName + " " + lastName);
+        System.out.println("Contact: " + mobileNumber);
         System.out.println("Ticket Type: " + ticketType);
         System.out.println("Play Status: " + playStatus);
         System.out.println("================================");

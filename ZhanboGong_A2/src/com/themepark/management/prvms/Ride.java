@@ -2,6 +2,12 @@ package com.themepark.management.prvms;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The Ride class implements RideInterface and overrides its methods
+ * The required attribute Settings in Assessment 2 are satisfied
+ * It provides empty and parameter constructors, as well as getters and setters to validate and read data.
+ * To make the logic even more logical, we add the changeLastVisitors method to manage the state of the previous round of visitors.
+ */
 public class Ride implements RideInterface{
     // rollerCoaster carries 2 people at a time and enters history after playing, while thunderstorm carries 4 people at a time
     private String rideType;
@@ -13,6 +19,7 @@ public class Ride implements RideInterface{
     private Queue<Visitor> visitorsQueue;
     private ArrayList<Visitor> lastVisitors;
     private LinkedList<Visitor> rideVisitorHistory;
+
 
 
     public Ride(){}
@@ -36,6 +43,7 @@ public class Ride implements RideInterface{
         }
     }
 
+    
     @Override
     public void addVisitorToQueue(Visitor visitor){
         if (visitor != null){
@@ -43,6 +51,7 @@ public class Ride implements RideInterface{
             {
                 visitorsQueue.offer(visitor);
                 visitor.setPlayStatus("On Queue");
+                System.out.println("Visitor " + visitor.getFirstName() + " is successfully added to the queue!");
             }
             else{
                 System.out.println("The current status of the visitor is " + visitor.getPlayStatus() + ", unable to join queue!");
@@ -54,11 +63,11 @@ public class Ride implements RideInterface{
     }
     @Override
     public void removeVisitorFromQueue(){
-        //空的情况下继续遍历可能会报错
-        //int ridersToTake = Math.min(visitorsQueue.size(), maxRider);
-        // 后续添加对Queue中的人数进行判断
-        //for (int i = 0; i < ridersToTake; i++) { ... }
-        for (int i = 0; i < maxRider; i++) {
+        int actualRiders = visitorsQueue.size();
+        if (actualRiders > maxRider){
+            actualRiders = maxRider;
+        }
+        for (int i = 0; i < actualRiders; i++) {
             Visitor visitor = visitorsQueue.poll();
             if(visitor != null){
                 if (maxRider == 4){
@@ -90,6 +99,7 @@ public class Ride implements RideInterface{
     //maxRider就是我现在的Setting
     @Override
     public void runOneCycle(){
+        // j加上对员工状态的判断
         if (employee == null){
             System.out.println("The Ride cannot be run without an operator!");
             return;
@@ -159,7 +169,7 @@ public class Ride implements RideInterface{
     }
 
     public void exportRideHistory(){
-        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         try (FileWriter writer = new FileWriter(rideHistoryFilePath, true)) {
             if (file.length() == 0){
@@ -178,7 +188,7 @@ public class Ride implements RideInterface{
         }
     }
     public void importRideHistory() {
-        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         if (file.length() == 0 || !file.exists()) {
             System.out.println("The file does not exist or is empty and cannot be read!");
