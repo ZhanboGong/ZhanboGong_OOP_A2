@@ -86,9 +86,28 @@ public class Ride implements RideInterface{
                 visitor.personalHistory(rideType);
                 onRideVisitor.add(visitor);
                 addVisitorToHistory(visitor);
+                System.out.println("Visitor " + visitor.getFirstName() + "is successfully removed from the queue!");
             }
             else {
                 System.out.println("The visitor object is null and cannot be modified!");
+            }
+        }
+    }
+
+    /**
+     * This method is added to account for the possibility of a single visitor being removed.
+     */
+    public void removeOneVisitorFromQueue(){
+        if (visitorsQueue == null || visitorsQueue.isEmpty()){
+            System.out.println("The queue is null or empty!");
+        }
+        else {
+            Visitor visitor = visitorsQueue.poll();
+            if (visitor != null){
+                System.out.println("Visitor " + visitor.getFirstName() + " is successfully removed from the queue!");
+            }
+            else{
+                System.out.println("This visitor is null!");
             }
         }
     }
