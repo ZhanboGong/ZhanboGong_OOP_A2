@@ -318,7 +318,12 @@ public class Ride implements RideInterface{
     }
 
     public void setOperatingState(boolean operatingState) {
-        this.operatingState = operatingState;
+        if (this.operatingState == operatingState){
+            System.out.println("The current state is already " + operatingState);
+        }
+        else{
+            this.operatingState = operatingState;
+        }
     }
 
     public Queue<Visitor> getVisitorsQueue() {

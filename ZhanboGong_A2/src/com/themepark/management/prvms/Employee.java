@@ -13,7 +13,13 @@ public class Employee extends Person{
 
     @Override
     public void printInformation(){
-
+        System.out.println("================================");
+        System.out.println("ID: " + ID);
+        System.out.println("Employee Name: " + firstName + " " + lastName);
+        System.out.println("Contact: "+ mobileNumber);
+        System.out.println("Employee Type: " + employeeType);
+        System.out.println("Working Status: " + workingStatus);
+        System.out.println("================================");
     }
     public String getEmployeeType() {
         return employeeType;
