@@ -3,7 +3,7 @@ package com.themepark.management.prvms;
 /**
  * The Person class is an abstract class
  * Contains the base properties ID, firstName, lastName, and mobileNumber
- *
+ * This class is inherited by the Employee and Visitor classes
  */
 public abstract class Person {
     protected int ID;
@@ -11,6 +11,7 @@ public abstract class Person {
     protected String lastName;
     protected String mobileNumber;
 
+    // No-argument
     public Person(){}
 
     public Person(int ID, String firstName, String lastName, String mobileNumber) {

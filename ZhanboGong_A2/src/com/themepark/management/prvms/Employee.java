@@ -59,10 +59,12 @@ public class Employee extends Person{
         }
     }
 
+    // Used to get the workingStatus
     public boolean isWorkingStatus() {
         return workingStatus;
     }
 
+    // Used to set the new workingStatus
     public void setWorkingStatus(boolean workingStatus) {
         if (this.workingStatus == workingStatus){
             System.out.println("The working state of Employee" + ID + " is already " + workingStatus);
