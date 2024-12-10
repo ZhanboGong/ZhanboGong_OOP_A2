@@ -11,9 +11,16 @@ public abstract class Person {
     protected String lastName;
     protected String mobileNumber;
 
-    // No-argument
+    // No-argument Constructors
     public Person(){}
 
+    /**
+     *
+     * @param ID: Represents the ID of the Person
+     * @param firstName: Represents the firstName of the Person
+     * @param lastName: Represents the lastName of the Person
+     * @param mobileNumber: Represents the Contact Phone Number of the Person
+     */
     public Person(int ID, String firstName, String lastName, String mobileNumber) {
         this.ID = ID;
         this.firstName = firstName;
@@ -21,22 +28,29 @@ public abstract class Person {
         this.mobileNumber = mobileNumber;
     }
 
-    // Note: Use regular expressions to validate your data, and throw exceptions instead of printing them
-
+    // Used to get the Person ID
     public int getID() {
         return ID;
     }
 
+    // Used to update the Person ID
     public void setID(int ID) {
         this.ID = ID;
     }
 
+    /**
+     * This is an abstract method on the Person class that prints information about the object
+     */
     public abstract void printInformation();
 
+    // Used to get the Person's firstname
     public String getFirstName() {
         return firstName;
     }
 
+    // Used to update the Person's firstname
+    // Use a regular expression to validate the data,
+    // ensuring that the first letter is uppercase and all subsequent letters are lowercase, and that no other symbols are included
     public void setFirstName(String firstName) {
         String firstNameRegex = "[A-Z][a-z]*";
         if(firstName == null || firstName.trim().isEmpty()){
@@ -50,11 +64,13 @@ public abstract class Person {
         }
     }
 
+    // Used to get the Person's lastname
     public String getLastName() {
 
         return lastName;
     }
 
+    // Used to update the Person's lastname
     public void setLastName(String lastName) {
         String lastNameRegex = "[A-Z][a-z]*";
         if(lastName == null || lastName.trim().isEmpty()){
@@ -68,6 +84,7 @@ public abstract class Person {
         }
     }
 
+    // Used to get the mobile number
     public String getMobileNumber() {
         return mobileNumber;
     }
