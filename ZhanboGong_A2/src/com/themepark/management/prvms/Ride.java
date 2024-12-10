@@ -244,9 +244,10 @@ public class Ride implements RideInterface{
      * The visitor information in the history is exported and stored in a CSV file
      * The exported information is the visitor's current ID, Name, Ticket Type and current status
      * Export the files to the backup package for easier management
+     * !! This method cannot be called when the file is opened using software such as word because of threading
      */
     public void exportRideHistory(){
-        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         try (FileWriter writer = new FileWriter(rideHistoryFilePath, true)) {
             if (file.length() == 0){
@@ -266,10 +267,13 @@ public class Ride implements RideInterface{
     }
 
     /**
-     *
+     * Read the visitor history in a CSV file
+     * The format as following:
+     * ID: ***, Name: *** ***, Ticket Type: ***, Play Status: ***
+     * !! This method cannot be called when the file is opened using software such as word because of threading
      */
     public void importRideHistory() {
-        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         if (file.length() == 0 || !file.exists()) {
             System.out.println("The file does not exist or is empty and cannot be read!");
@@ -323,6 +327,7 @@ public class Ride implements RideInterface{
         }
         else{
             this.operatingState = operatingState;
+            System.out.println("The operating state is set to " + operatingState);
         }
     }
 

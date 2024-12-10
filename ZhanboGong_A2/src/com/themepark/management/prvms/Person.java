@@ -1,5 +1,10 @@
 package com.themepark.management.prvms;
 
+/**
+ * The Person class is an abstract class
+ * Contains the base properties ID, firstName, lastName, and mobileNumber
+ *
+ */
 public abstract class Person {
     protected int ID;
     protected String firstName;
@@ -34,12 +39,13 @@ public abstract class Person {
     public void setFirstName(String firstName) {
         String firstNameRegex = "[A-Z][a-z]*";
         if(firstName == null || firstName.trim().isEmpty()){
-            System.out.println("To be written...");
+            System.out.println("Name must be in the following format: Initial(A-Z) Follow-up(a-z)");
         } else if (!firstName.matches(firstNameRegex)) {
             System.out.println("The first name must begin with an uppercase letter and follow with a lowercase letter!");
         }
         else {
             this.firstName = firstName;
+            System.out.println("First Name is set to " + firstName);
         }
     }
 
@@ -51,12 +57,13 @@ public abstract class Person {
     public void setLastName(String lastName) {
         String lastNameRegex = "[A-Z][a-z]*";
         if(lastName == null || lastName.trim().isEmpty()){
-            System.out.println("To be written...");
+            System.out.println("Name must be in the following format: Initial(A-Z) Follow-up(a-z)");
         } else if (!lastName.matches(lastNameRegex)) {
             System.out.println("The last name must begin with an uppercase letter and follow with a lowercase letter!");
         }
         else {
             this.lastName = lastName;
+            System.out.println("Last Name is set to " + lastName);
         }
     }
 
@@ -78,6 +85,7 @@ public abstract class Person {
         }
         else{
             this.mobileNumber = mobileNumber;
+            System.out.println("Mobile Number is set to " + mobileNumber);
         }
     }
 }
