@@ -46,6 +46,10 @@ public class Visitor extends Person{
         System.out.println("================================");
     }
 
+    /**
+     * The history of each ride of the visitor is added to the personal history
+     * @param rideType: The type of Ride the visitor is on
+     */
     public void personalHistory(String rideType){
         String personalRecord = playOfNumber++ + ":" + rideType;
         rideHistories.add(personalRecord);
