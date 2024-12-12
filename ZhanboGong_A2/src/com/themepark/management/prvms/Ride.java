@@ -241,6 +241,23 @@ public class Ride implements RideInterface{
     }
 
     /**
+     * Sort the history list, sorting by ID and lastName
+     */
+    public void sortVisitor(){
+        if (rideVisitorHistory == null || rideVisitorHistory.isEmpty()){
+            System.out.println("The history list is null or empty");
+            return;
+        }
+        try {
+            rideVisitorHistory.sort(new VisitorComparator());
+        } catch (ClassCastException e) {
+            System.out.println("There is an error with the Visitor object");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    /**
      * The visitor information in the history is exported and stored in a CSV file
      * The exported information is the visitor's current ID, Name, Ticket Type and current status
      * Export the files to the backup package for easier management
