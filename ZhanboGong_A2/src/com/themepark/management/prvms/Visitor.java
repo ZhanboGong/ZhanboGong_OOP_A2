@@ -56,8 +56,6 @@ public class Visitor extends Person{
         System.out.println("Visitor" + ID + " added success to his or her personal history");
     }
 
-    // 可添加方法进行读取历史
-
     // Used to get the visitor play status
     public String getPlayStatus() {
         return playStatus;
