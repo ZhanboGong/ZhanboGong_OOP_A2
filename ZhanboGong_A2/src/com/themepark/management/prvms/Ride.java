@@ -19,9 +19,15 @@ public class Ride implements RideInterface{
     private Queue<Visitor> visitorsQueue;
     private LinkedList<Visitor> rideVisitorHistory;
 
-
-
+    // No-argument constructors
     public Ride(){}
+
+    /**
+     *
+     * @param rideType: Represents the type of the ride
+     * @param employee: Represents the operator of the ride
+     * @param operatingState: Represents the status of the ride
+     */
     public Ride(String rideType, Employee employee, boolean operatingState) {
         this.rideType = rideType;
         this.employee = employee;
@@ -30,7 +36,6 @@ public class Ride implements RideInterface{
         this.visitorsQueue = new LinkedList<>();
         this.rideVisitorHistory = new LinkedList<>();
         this.onRideVisitor = new LinkedHashSet<>();
-        //判断是否type为null
         if(rideType.equals("Roller Coaster")){
             this.maxRider = 2;
         }
@@ -184,7 +189,7 @@ public class Ride implements RideInterface{
                 Visitor visitorHistory = visitorIterator.next();
                 if (visitorHistory.equals(visitor)){
                     System.out.println("The visitor has been found with a total of " +
-                            visitor.getPlayOfNumber() +
+                            visitor.getPlayOfNumber()  +
                             " visits. Please check the visitor's personal history for details.");
                     return;
                 }
@@ -264,17 +269,19 @@ public class Ride implements RideInterface{
      * !! This method cannot be called when the file is opened using software such as word because of threading
      */
     public void exportRideHistory(){
-        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         try (FileWriter writer = new FileWriter(rideHistoryFilePath, true)) {
             if (file.length() == 0){
-                writer.append("ID, Name, Ticket Type, Play Status\n");
+                writer.append("ID, First Name, Last Name, Phone Number, Play Status, Ticket Type\n");
             }
             for (Visitor visitor : rideVisitorHistory){
                 writer.append(String.valueOf(visitor.getID())).append(", ")
-                        .append(visitor.getFirstName()).append(" ").append(visitor.getLastName()).append(", ")
-                        .append(visitor.getTicketType()).append(", ")
-                        .append(visitor.getPlayStatus()).append("\n");
+                        .append(visitor.getFirstName()).append(", ")
+                        .append(visitor.getLastName()).append(", ")
+                        .append(visitor.getMobileNumber()).append(", ")
+                        .append(visitor.getPlayStatus()).append(", ")
+                        .append(visitor.getTicketType()).append("\n");
             }
             System.out.println("The history export was successful!");
         } catch (IOException e) {
@@ -289,8 +296,8 @@ public class Ride implements RideInterface{
      * ID: ***, Name: *** ***, Ticket Type: ***, Play Status: ***
      * !! This method cannot be called when the file is opened using software such as word because of threading
      */
-    public void importRideHistory() {
-        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
+    public void readRideHistory() {
+        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         if (file.length() == 0 || !file.exists()) {
             System.out.println("The file does not exist or is empty and cannot be read!");
@@ -301,8 +308,35 @@ public class Ride implements RideInterface{
             reader.readLine();
             while ((lineRecord = reader.readLine()) != null) {
                 String[] columns = lineRecord.split(",");
-                if (columns.length == 4){
-                    System.out.println("ID: " + columns[0] + ", Name: " + columns[1] + ", Ticket Type: " + columns[2] + ", Play Status: " + columns[3]);
+                if (columns.length == 6){
+                    System.out.println("[ID: " + columns[0] + ", First Name: " + columns[1] + ", Last Name: " + columns[2]
+                             + ", Phone Number: " + columns[3] + ", Play Status: " + columns[4] + ", Ticket Type: " + columns[5] + "]");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Main function: Read the history information from an existing file and store it in the history list of the Ride object
+     */
+    public void importRideHistory(){
+        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        File file = new File(rideHistoryFilePath);
+        if (file.length() == 0 || !file.exists()) {
+            System.out.println("The file does not exist or is empty and cannot be read!");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(rideHistoryFilePath))) {
+            String lineRecord;
+            reader.readLine();
+            while ((lineRecord = reader.readLine()) != null) {
+                String[] columns = lineRecord.split(",");
+                if (columns.length == 6){
+                    Visitor visitor = new Visitor(Integer.parseInt(columns[0].trim()),columns[1].trim(), columns[2].trim(), columns[3].trim(), columns[4].trim(), columns[5].trim());
+                    addVisitorToHistory(visitor);
                 }
             }
         } catch (IOException e) {
@@ -316,6 +350,7 @@ public class Ride implements RideInterface{
         return rideType;
     }
 
+    // Used to set the new ride type and verify that the ride type must be one of Roller Coaster and Thunder Storm
     public void setRideType(String rideType) {
         String rideTypeRegex = "Roller Coaster|Thunder Storm";
         if(!rideType.matches(rideTypeRegex)){
@@ -326,18 +361,28 @@ public class Ride implements RideInterface{
         }
     }
 
+    // Used to get the ride operator
     public Employee getEmployee() {
         return employee;
     }
 
+    // Used to change the ride operator
     public void setEmployee(Employee employee) {
-        this.employee = employee;
+        if(employee != null){
+            this.employee = employee;
+            System.out.println("The current operator has been changed to " + employee.getFirstName());
+        }
+        else {
+            System.out.println("Employee Object cannot be null!");
+        }
     }
 
+    // Used to get the operating state
     public boolean isOperatingState() {
         return operatingState;
     }
 
+    // Used to update the operating state
     public void setOperatingState(boolean operatingState) {
         if (this.operatingState == operatingState){
             System.out.println("The current state is already " + operatingState);
@@ -348,18 +393,21 @@ public class Ride implements RideInterface{
         }
     }
 
+    // Used to get the visitorQueue
     public Queue<Visitor> getVisitorsQueue() {
         return visitorsQueue;
     }
 
 
+    // Used to get the maxRider number
     public int getMaxRider() {
         return maxRider;
     }
 
-
+    // Used to get the rideVisitorHistory
     public LinkedList<Visitor> getRideVisitorHistory(){return rideVisitorHistory;}
 
+    // Used to get the numOfCycles
     public int getNumOfCycles() {
         return numOfCycles;
     }
