@@ -7,6 +7,11 @@ import com.themepark.management.prvms.Visitor;
 
 public class AssessmentTwo {
     public static void main(String[] args) {
+        // partThree();
+        // partFourA();
+        // partFourB();
+        // partFive();
+        // partSix();
         partSeven();
     }
     public static void partThree(){
