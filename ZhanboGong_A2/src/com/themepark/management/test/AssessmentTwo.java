@@ -12,7 +12,7 @@ public class AssessmentTwo {
         // partFourB();
         // partFive();
         // partSix();
-        partSeven();
+        // partSeven();
     }
     public static void partThree(){
         // Create five Visitor object and an employee object

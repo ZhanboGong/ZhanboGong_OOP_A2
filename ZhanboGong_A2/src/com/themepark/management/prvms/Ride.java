@@ -269,7 +269,7 @@ public class Ride implements RideInterface{
      * !! This method cannot be called when the file is opened using software such as word because of threading
      */
     public void exportRideHistory(){
-        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         try (FileWriter writer = new FileWriter(rideHistoryFilePath, true)) {
             if (file.length() == 0){
@@ -286,7 +286,27 @@ public class Ride implements RideInterface{
             System.out.println("The history export was successful!");
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-            throw new RuntimeException(e);
+            System.out.println("Go back to the current path and create rideHistory.csv");
+        }
+
+        rideHistoryFilePath = "rideHistory.csv";
+        file = new File(rideHistoryFilePath);
+        try (FileWriter fallbackWriter = new FileWriter(file, true)) {
+            if (file.length() == 0) {
+                fallbackWriter.append("ID, First Name, Last Name, Phone Number, Play Status, Ticket Type\n");
+            }
+            for (Visitor visitor : rideVisitorHistory) {
+                fallbackWriter.append(String.valueOf(visitor.getID())).append(", ")
+                        .append(visitor.getFirstName()).append(", ")
+                        .append(visitor.getLastName()).append(", ")
+                        .append(visitor.getMobileNumber()).append(", ")
+                        .append(visitor.getPlayStatus()).append(", ")
+                        .append(visitor.getTicketType()).append("\n");
+            }
+            System.out.println("The history export was successful in the current directory!");
+        } catch (IOException fallbackException) {
+            System.err.println("Rollback file write failure: " + fallbackException.getMessage());
+            throw new RuntimeException(fallbackException);
         }
     }
 
@@ -297,11 +317,16 @@ public class Ride implements RideInterface{
      * !! This method cannot be called when the file is opened using software such as word because of threading
      */
     public void readRideHistory() {
-        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         if (file.length() == 0 || !file.exists()) {
-            System.out.println("The file does not exist or is empty and cannot be read!");
-            return;
+            System.out.println("The file does not exist or is empty and cannot be read! Rollback to rideHistory.csv");
+            rideHistoryFilePath = "rideHistory.csv";
+            file = new File(rideHistoryFilePath);
+            if (file.length() == 0 || !file.exists()) {
+                System.out.println("The file does not exist or is empty and cannot be read!");
+                return;
+            }
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(rideHistoryFilePath))) {
             String lineRecord;
@@ -310,7 +335,7 @@ public class Ride implements RideInterface{
                 String[] columns = lineRecord.split(",");
                 if (columns.length == 6){
                     System.out.println("[ID: " + columns[0] + ", First Name: " + columns[1] + ", Last Name: " + columns[2]
-                             + ", Phone Number: " + columns[3] + ", Play Status: " + columns[4] + ", Ticket Type: " + columns[5] + "]");
+                            + ", Phone Number: " + columns[3] + ", Play Status: " + columns[4] + ", Ticket Type: " + columns[5] + "]");
                 }
             }
         } catch (IOException e) {
@@ -323,11 +348,16 @@ public class Ride implements RideInterface{
      * Main function: Read the history information from an existing file and store it in the history list of the Ride object
      */
     public void importRideHistory(){
-        String rideHistoryFilePath = "ZhanboGong_OOP_A2/ZhanboGong_A2/src/com/themepark/management/backup/rideHistory.csv";
+        String rideHistoryFilePath = "src/com/themepark/management/backup/rideHistory.csv";
         File file = new File(rideHistoryFilePath);
         if (file.length() == 0 || !file.exists()) {
-            System.out.println("The file does not exist or is empty and cannot be read!");
-            return;
+            System.out.println("The file does not exist or is empty and cannot be read! Rollback to rideHistory.csv");
+            rideHistoryFilePath = "rideHistory.csv";
+            file = new File(rideHistoryFilePath);
+            if (file.length() == 0 || !file.exists()) {
+                System.out.println("The file does not exist or is empty and cannot be read!");
+                return;
+            }
         }
         try (BufferedReader reader = new BufferedReader(new FileReader(rideHistoryFilePath))) {
             String lineRecord;
