@@ -246,7 +246,7 @@ public class Ride implements RideInterface{
     }
 
     /**
-     * Sort the history list, sorting by ID and lastName
+     * Sort the visitors in the history list that have ridden, sorting by ID and lastName
      */
     public void sortVisitor(){
         if (rideVisitorHistory == null || rideVisitorHistory.isEmpty()){

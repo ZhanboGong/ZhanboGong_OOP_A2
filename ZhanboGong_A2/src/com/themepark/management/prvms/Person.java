@@ -35,7 +35,12 @@ public abstract class Person {
 
     // Used to update the Person ID
     public void setID(int ID) {
+        if (ID < 0) {
+            System.out.println("The Person ID must be positive integer");
+            return;
+        }
         this.ID = ID;
+        System.out.println("The person's ID is updated to " + ID);
     }
 
     /**

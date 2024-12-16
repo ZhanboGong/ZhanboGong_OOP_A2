@@ -139,7 +139,7 @@ public class AssessmentTwo {
         // import the file
         ride1.importRideHistory();
         // print the Visitor number
-        ride1.numberOfVisitors();
+        System.out.println(ride1.numberOfVisitors());
         // print Visitor History List
         ride1.printRideHistory();
     }
